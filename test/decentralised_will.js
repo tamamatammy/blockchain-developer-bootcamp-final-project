@@ -1,4 +1,3 @@
-
 const { lowerCase } = require("lodash");
 const DecentralisedWill = artifacts.require("DecentralisedWill");
 const MultiSig = artifacts.require("MultiSig");
@@ -10,26 +9,22 @@ const MultiSig = artifacts.require("MultiSig");
  */
  
 contract("DecentralisedWill", function (accounts) {
-  // // Test 1: Check whether there is a contract deployed
-  // it("should assert true", async function () {
-  //   await DecentralisedWill.deployed();
-  //   return assert.isTrue(true);
-  // });
+
   let dw;
   const msOwners = [accounts[0], accounts[1]];
   const msNumOwners = msOwners.length;
   const alice = accounts[2];
   const bob = accounts[3];
 
-  before(async () => {
-      dw = await DecentralisedWill.new();
-      ms = await MultiSig.new(msOwners, msNumOwners);
-  })
 
   // Unit testing for main contract DecentralisedWill 
   describe("DecentralisedWill contract testing", () => {
 
-
+    before(async () => {
+      ms = await MultiSig.new(msOwners, msNumOwners);
+      dw = await DecentralisedWill.new(ms.address);
+    })
+  
   it('Should DecentralisedWill contract balance starts with 0 ETH', async () => {
     const balance = await web3.eth.getBalance(dw.address);
     assert.equal(balance, 0, 'Initial dw contract balance is not 0!');
@@ -63,20 +58,28 @@ contract("DecentralisedWill", function (accounts) {
     const abi = await dw.getDistributeAssetData();
   })
 
-  it('Should asset distributed correctly', async() => {
+  it('Should only be sent by multisig contract', async() => {
     let balance = await web3.eth.getBalance(dw.address);
     let setAmount = balance * 0.7;
     const priorBalance =  await web3.eth.getBalance(alice);
     console.log(priorBalance)
-    await dw.distributeAsset();
-    const postBalance =  await web3.eth.getBalance(alice);
-    console.log(postBalance)
-    const diff = postBalance - priorBalance; 
-    assert.equal(diff, setAmount , 'To address been transfered with incorrect amount');
+
+    try {    
+      await dw.distributeAsset();
+      throw new Error("tx did not fail")
+    } catch(err){}
+      const postBalance =  await web3.eth.getBalance(alice);
+      console.log(postBalance)
+      assert.equal(priorBalance, postBalance , 'Contract can be executed by unwanted sender!');
   })
 })
 
   describe("MutiSig contract testing", () => {
+
+    before(async () => {
+      ms = await MultiSig.new(msOwners, msNumOwners);
+      dw = await DecentralisedWill.new(ms.address);
+    })
   
     it("should MutiSig contract assert true", async function () {
     await MultiSig.deployed();
@@ -93,6 +96,8 @@ contract("DecentralisedWill", function (accounts) {
       await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
       
       // Set ammount that alice suppose to get
+      // const priorCaller = web3.eth.Contract(dw.address)
+      console.log('Prior multisig dw caller: ' + dw);
       const expectedPortion = 70; 
       const abi = await dw.getDistributeAssetData.call();
       const msPriorbalance = await web3.eth.getBalance(ms.address);
@@ -107,7 +112,8 @@ contract("DecentralisedWill", function (accounts) {
 
       const postContractBalance = await web3.eth.getBalance(ms.address);
       console.log('MultiSig balance After executing contract ' + postContractBalance)  
-
+      // const  postCaller = web3.eth.Contract(dw.address)
+      console.log('Post multisig dw caller: ' + dw);
       //Post dw balance
       const postAliceBalance =  await web3.eth.getBalance(alice);
       console.log("Alice balance after contract " + postAliceBalance)
@@ -118,7 +124,7 @@ contract("DecentralisedWill", function (accounts) {
 
     it("Should multisig failed if same transaction execute more than once ", async() =>{
       const dwAmount = web3.utils.toWei("0.01", "ether");
-      const abi = await dw.getDistributeAssetData.call();
+      const abi = await dw.getDistributeAssetData();
       await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
       const msPriorbalance = await web3.eth.getBalance(ms.address)
       console.log("MultiSig balance before executing contract ", msPriorbalance);
@@ -131,14 +137,14 @@ contract("DecentralisedWill", function (accounts) {
 
       const msPostBalance = await web3.eth.getBalance(ms.address)
       console.log('MultiSig balance after executing contract ' + msPostBalance)  
-      assert.equal(msPriorbalance, msPostBalance, "Mutisig contract balance changed!")
+      assert.equal(msPriorbalance, msPostBalance, "DW can be executed more than once!")
     })
 
     it("Should multisig failed without losing contract balance unchanged if the contract did not receive enough signature ", async() =>{
-      dw_mew = await DecentralisedWill.new(); // create new instance
+      dw_mew = await DecentralisedWill.new(dw.address); // create new instance
       ms_new = await MultiSig.new(msOwners, msNumOwners); // create new instance
       const dwAmount = web3.utils.toWei("0.01", "ether");
-      const abi = await dw_mew.getDistributeAssetData.call();
+      const abi = await dw.getDistributeAssetData();
       await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
       await ms_new.submitTransaction(dw_mew.address, 0, abi, {from: accounts[0]});
       const msPriorbalance = await web3.eth.getBalance(ms_new.address)
@@ -146,11 +152,11 @@ contract("DecentralisedWill", function (accounts) {
       try {
         await ms_new.confirmTransaction(0, {from: accounts[0]}) 
         throw new Error("tx did not fail")
-      } catch (err){
+      } catch (err){}
       const msPostBalance = await web3.eth.getBalance(ms_new.address)
       console.log('MultiSig balance after executing contract ' + msPostBalance)  
-      assert.equal(msPriorbalance, msPostBalance, "Mutisig contract balance changed!")
-    }
+      assert.equal(msPriorbalance, msPostBalance, "DW can be executed with unwanted 2nd signature!")
+    
 
 
   })

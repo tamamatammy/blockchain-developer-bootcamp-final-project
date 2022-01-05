@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity 0.8.10;
 
 contract MultiSig {
 
@@ -91,7 +91,7 @@ contract MultiSig {
               
               payable(t.destination).transfer(address(this).balance);
               
-              (bool success, /*bytes memory */) = t.destination.call{value: t.value}(t.data);
+              (bool success, ) = t.destination.call{value: t.value}(t.data);
 
               
               if (success)
