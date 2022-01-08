@@ -10,34 +10,31 @@ const MultiSig = artifacts.require("MultiSig");
  
 contract("DecentralisedWill", function (accounts) {
 
-  let dw;
   const msOwners = [accounts[0], accounts[1]];
   const msNumOwners = msOwners.length;
   const alice = accounts[2];
   const bob = accounts[3];
 
-
-  // Unit testing for main contract DecentralisedWill 
-  describe("DecentralisedWill contract testing", () => {
-
+  describe("Test decentralised will functions", () => {
+    const waitBlock = 0;
     before(async () => {
-      ms = await MultiSig.new(msOwners, msNumOwners);
+      ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
       dw = await DecentralisedWill.new(ms.address);
     })
   
-  it('Should DecentralisedWill contract balance starts with 0 ETH', async () => {
+  it('Should dw balance starts with 0 ETH', async () => {
     const balance = await web3.eth.getBalance(dw.address);
     assert.equal(balance, 0, 'Initial dw contract balance is not 0!');
 })
   
-  it('Should DecentralisedWill contract balance has 1 ETH after deposit', async () => {
+  it('Should dw balance has 1 ETH after deposit', async () => {
     const amount = web3.utils.toWei("0.01", "ether");
     await web3.eth.sendTransaction({from: accounts[0], to: dw.address, value: amount});
     const balance_wei = await web3.eth.getBalance(dw.address);
     assert.equal(amount, balance_wei);
   })
 
-  it('Should Alice to be on the will', async() => {
+  it('Should Alice be on the will', async() => {
       let setAlicePortion = 70;
       let id = 0
       let aliceWill = await dw.getHeirPortion(id);
@@ -45,7 +42,7 @@ contract("DecentralisedWill", function (accounts) {
       assert.equal(setAlicePortion, aliceWill[1], 'Inherit portion is not implemented correctly!');
   })
 
-  it('Should Bob to be on the will', async() => {
+  it('Should Bob be on the will', async() => {
     let setBobPortion = 30;
     let id = 1
     let bobWill = await dw.getHeirPortion(id);
@@ -54,11 +51,11 @@ contract("DecentralisedWill", function (accounts) {
 
   })
 
-  it("Should DW returns byte data for distributeAsset function", async() =>{
+  it("Should dw returns byte data for distributeAsset function", async() =>{
     const abi = await dw.getDistributeAssetData();
   })
 
-  it('Should only be sent by multisig contract', async() => {
+  it('Should dw only be sent by multisig contract', async() => {
     let balance = await web3.eth.getBalance(dw.address);
     let setAmount = balance * 0.7;
     const priorBalance =  await web3.eth.getBalance(alice);
@@ -74,14 +71,15 @@ contract("DecentralisedWill", function (accounts) {
   })
 })
 
-  describe("MutiSig contract testing", () => {
 
+  describe("Test multi signaure functions", () => {
+    const waitBlock = 0;
     before(async () => {
-      ms = await MultiSig.new(msOwners, msNumOwners);
+      ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
       dw = await DecentralisedWill.new(ms.address);
     })
-  
-    it("should MutiSig contract assert true", async function () {
+
+    it("should ms assert true", async function () {
     await MultiSig.deployed();
     return assert.isTrue(true);
     })
@@ -95,8 +93,6 @@ contract("DecentralisedWill", function (accounts) {
       let dwAmount = web3.utils.toWei("0.01", "ether");
       await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
       
-      // Set ammount that alice suppose to get
-      // const priorCaller = web3.eth.Contract(dw.address)
       console.log('Prior multisig dw caller: ' + dw);
       const expectedPortion = 70; 
       const abi = await dw.getDistributeAssetData.call();
@@ -122,7 +118,7 @@ contract("DecentralisedWill", function (accounts) {
       assert.equal(expectedAmount, diff, 'Alice been transfered with incorrect amount');
     })
 
-    it("Should multisig failed if same transaction execute more than once ", async() =>{
+    it("Should ms failed if same transaction execute more than once ", async() =>{
       const dwAmount = web3.utils.toWei("0.01", "ether");
       const abi = await dw.getDistributeAssetData();
       await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
@@ -140,11 +136,13 @@ contract("DecentralisedWill", function (accounts) {
       assert.equal(msPriorbalance, msPostBalance, "DW can be executed more than once!")
     })
 
-    it("Should multisig failed without losing contract balance unchanged if the contract did not receive enough signature ", async() =>{
+    it("Should ms failed without losing contract balance unchanged if the contract did not receive enough signature ", async() =>{
+      const waitBlock = 0;
       dw_mew = await DecentralisedWill.new(dw.address); // create new instance
-      ms_new = await MultiSig.new(msOwners, msNumOwners); // create new instance
+      ms_new = await MultiSig.new(msOwners, msNumOwners, waitBlock); // create new instance
       const dwAmount = web3.utils.toWei("0.01", "ether");
       const abi = await dw.getDistributeAssetData();
+      console.log(abi)
       await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
       await ms_new.submitTransaction(dw_mew.address, 0, abi, {from: accounts[0]});
       const msPriorbalance = await web3.eth.getBalance(ms_new.address)
@@ -157,81 +155,68 @@ contract("DecentralisedWill", function (accounts) {
       console.log('MultiSig balance after executing contract ' + msPostBalance)  
       assert.equal(msPriorbalance, msPostBalance, "DW can be executed with unwanted 2nd signature!")
     
-
-
   })
 
 })
 
+describe("Test wallet lock function contract", () => {
+
+it("should not allowed dw execution during locked period", async() =>{
+      const waitBlock = 100;
+      ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
+      dw = await DecentralisedWill.new(ms.address);
+      dwAmount = web3.utils.toWei("0.01", "ether");
+      const encoded = await dw.getDistributeAssetData.call();
+
+      await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
+      const msPriorbalance = await web3.eth.getBalance(ms.address)
+
+      await ms.submitTransaction(dw.address, 0, encoded, {from: accounts[0]});
+      await ms.confirmTransaction(0, {from: accounts[1]});
+
+      const msPostBalance = await web3.eth.getBalance(ms.address)
+
+      assert.equal(msPriorbalance, msPostBalance, "DW can be when wallet is locked!")
+
+    });
+
+it("should allowed execution after locked period", async() =>{
+    const waitBlock = 0;
+    ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
+    dw = await DecentralisedWill.new(ms.address);
+    dwAmount = web3.utils.toWei("0.01", "ether");
+    const encoded = await dw.getDistributeAssetData.call();
+    await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
+    msBalance = web3.eth.getBalance(ms.address);
+    console.log(msBalance)
+    const msPriorbalance = await web3.eth.getBalance(ms.address)
+
+    await ms.submitTransaction(dw.address, 0, encoded, {from: accounts[0]});
+    await ms.confirmTransaction(0, {from: accounts[1]});
+
+    const msPostBalance = await web3.eth.getBalance(ms.address)
+
+    assert.equal(dwAmount, msPriorbalance-msPostBalance, "DW is not executed as expected!")
+
 })
-//   it("should send correct amount to destinated address", async () => {
-//     // const dwdw = await DecentralisedWill.new();
-    
-//     const amount =  web3.utils.toWei("1", "ether");
 
-//     console.log(amount)
-    
-//     const dwTo = accounts[2];//'0x04EF46F6EB84F6D358AbF6C33E16b1Cf0244A86C';
+it("should return ms signature count = 2 after 2 signatures", async() =>{
+  const waitBlock = 0;
 
-//     console.log(dwTo)
-    
-//     const priorBalance =  await web3.eth.getBalance(dwTo);
+  console.log(waitBlock);
 
-//     console.log(priorBalance);
+  ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
+  dw = await DecentralisedWill.new(ms.address);
+  dwAmount = web3.utils.toWei("0.01", "ether");
+  const encoded = await dw.getDistributeAssetData.call();
+  await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
+  await ms.submitTransaction(dw.address, 0, encoded, {from: accounts[0]});
+  await ms.confirmTransaction(0, {from: accounts[1]});
 
-//     await dw.distributeAsset(dwTo, amount);
+  const signum = await ms.getSigNum(0)
+  console.log(signum)
+  assert.equal(2, signum, "Signum is not 2!")
+})
+})
 
-//     const postBalance =  await web3.eth.getBalance(dwTo);
-
-//     const diff = postBalance - priorBalance
-
-//     console.log(diff)
-
-//     assert.equal(diff, amount, 'To address been transfered with incorrect amount');
-// });
-
-  // // Test 2: Check whether initial storedData is set to zero 
-  // it("has an initial value of 0", async () => {
-  //     // Get the contract been deployed
-  //     const ssdw = await SimpleStorage.deployed();
-  //     // Verify it has an inital value of -
-  //     const storedData = await ssdw.getStoredData.call();
-  //     assert.equal(storedData, 0, 'Initial state should be zero');
-
-  // });
-
-  // //Test3: set different tests for different functionaities
-  // describe("Functionality", () => {
-    
-  //   // Test 3.1: Data correctly stored
-  //   it("should store a new value 42", async () =>{
-  //     const ssdw = await SimpleStorage.deployed();
-
-  //     const setExpected = 42;
-
-  //     await ssdw.setStoredData(setExpected, {from: accounts [0]});
-
-  //     const storedData = await ssdw.getStoredData.call();
-      
-  //     assert.equal(storedData, setExpected, `Expected ${setExpected}, stored ${storedData}`)
-  //   })
-
-  // })
-
-  //   // Test 4: Data correctly stored
-  //    it("should not let someone else change the variable", async() => {
-  //     const [owner, badJoe] = accounts;
-  //     const ssdw = await SimpleStorage.new(42, {from: owner});
-
-  //     const balance = await web3.eth.getBalance(accounts[2]);
-  //     console.log(balance)
-
-  //     try {
-  //       await ssdw.setStoredData(22, {from: badJoe})
-  //     } catch(err) { }
-
-  //     const storedData = await ssdw.getStoredData.call();
-      
-  //     assert.equal(storedData, 42, "Someone else other than owner can change the storedData!")
-
-  //    })
+})

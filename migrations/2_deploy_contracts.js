@@ -6,6 +6,6 @@ const MultiSig = artifacts.require("MultiSig")
 module.exports = function (deployer, network, accounts) {
   const owners = [accounts[0], accounts[1]]
   deployer.deploy(DecentralisedWill, accounts[0]);
-  deployer.deploy(MultiSig, owners, 2)
+  deployer.deploy(MultiSig, owners, 2, 0)
   // if you need address of another contract to be useed this contract, add constructor variable here 
 };

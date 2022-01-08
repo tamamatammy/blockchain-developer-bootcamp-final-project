@@ -1,20 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.10;
 
-library Utils {
-    function getBalance(address _address) internal view returns (uint) {
-        return _address.balance;
-    }
-
-    function distribute(uint256 _totalAmount, uint256 _portion) internal pure returns (uint){
-        uint256 amount = _totalAmount * _portion / 100;
-        return amount;
-    }
-}
+import "./Utils.sol";
 
 contract DecentralisedWill {
-
-    using Utils for uint; //using library
 
     address public multisig;
 
@@ -26,23 +15,13 @@ contract DecentralisedWill {
     mapping (uint256 => willElement) public will;
     uint public wCount;
 
-
-
     constructor(address _multisig) {
         multisig = _multisig;
         will[0].heir = 0x64a68c98E525161B1f8644331D83026015B8312D;
         will[0].portion = 70;
         will[1].heir = 0x8e90460fB6c12f8894b2C552F7e93997a31d3C63;
         will[1].portion = 30;
-
-    
     }
-
-    // modifier checkSender() {
-    //       if (msg.sender != multisig)
-    //           revert();
-    //       _;
-    // }
 
     event Execution(address heir, uint priorBalance, uint heirValue, uint postBalance) ;
     

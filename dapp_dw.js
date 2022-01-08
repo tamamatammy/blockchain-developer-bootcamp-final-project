@@ -1,5 +1,22 @@
 console.log("hello dapp developers!")
 
+// Detect whether there is wallet 
+window.addEventListener('load', function() {
+    if (typeof window.ethereum !== 'undefined'){
+        console.log('Wallet detected')
+        let  walletDetected = document.getElementById('wallet-detected')
+        // piped in html from javascripts 
+        walletDetected.innerHTML += "Wallet has been detected"
+    }
+
+    else {
+        console.log('Wallet Not Available!')
+        alert("You need to install wallet!")        
+    }
+}
+
+)
+
 const dwABI = [
 	{
 		"inputs": [
@@ -494,26 +511,6 @@ var multisigABI = [
 		"type": "receive"
 	}
 ]
-// var multisigAddress = '0xcB584E2069A2e60e1D5A815F1Ed2c20A04a639c4'; // Multisig address
-
-
-// Detect whether there is wallet 
-window.addEventListener('load', function() {
-    if (typeof window.ethereum !== 'undefined'){
-        console.log('Wallet detected')
-        let  walletDetected = document.getElementById('wallet-detected')
-        // piped in html from javascripts 
-        walletDetected.innerHTML += "Wallet has been detected"
-    }
-
-    else {
-        console.log('Wallet Not Available!')
-        alert("You need to install wallet!")        
-    }
-}
-
-)
-
 
 // 2. Connect rich wallet
 const richWalletEnable = document.getElementById('wallet-connect');
@@ -4092,9 +4089,7 @@ deployDW.onclick = async () => {
         getDwAddress.innerHTML = "Decentralised Will Address: " + dwAddress
 
     });
-
 }
-
 
 const lawyerWalletEnable = document.getElementById('lawyer1-wallet-connect');
 
@@ -4107,17 +4102,12 @@ lawyerWalletEnable.onclick = async () => {
     walletCurrentAccount.innerHTML = "Connected Wallet: " + ethereum.selectedAddress
 }
 
-//0x896E4Af05B39db5775c34E1487919Cad7384E7D0
-
-
-// dw address = 0x8c97f34fB44AC6C8b0617837E0dD640218Bd85FE
-
-
 const provideSignature = document.getElementById('lawyer1-sign');
 
 provideSignature.onclick = async() => {
 
     const dwAddress = document.getElementById('dw-address-sign').value;
+
     const multisigAddress = document.getElementById('ms-address-sign').value;
 
 
@@ -4133,6 +4123,14 @@ provideSignature.onclick = async() => {
 
     console.log(encoded)
 
+    // const methodID = web3.eth.abi.encodeFunctionSignature('distributeAsset()')
+
+    // const param = web3.eth.abi.encodeParameter(' ')
+
+    // encoded2 = methodID + web3.utils.padLeft(param, 32); 
+
+    // console.log(encoded2)
+
     var web3 = new Web3(window.ethereum)
 
     const multiSig = new web3.eth.Contract(multisigABI, multisigAddress)
@@ -4143,15 +4141,10 @@ provideSignature.onclick = async() => {
 
     await multiSig.methods.submitTransaction(dwAddress, 0, encoded).send({from: web3.givenProvider.selectedAddress})
 
-
-    // await multiSig.methods.confirmTransaction(0);
-
-    // console.log(multiSig.events.Execution)
-
-    // web3.eth.getTransactionReceipt(tx)
 } 
 
 
+// Trusted Lawyer Wallet Connection
 const lawyerWallet2Enable = document.getElementById('lawyer2-wallet-connect');
 
 lawyerWallet2Enable.onclick = async () => {
@@ -4164,24 +4157,29 @@ lawyerWallet2Enable.onclick = async () => {
 }
 
 
+
+// ms address = 0x896E4Af05B39db5775c34E1487919Cad7384E7D0
+
+// 
+// dw address = 0xc69c4eE10b05d1fAdFfB565aDa41BeC4B17aF91a
+
+
+// Trusted Lawyer Wallet 2nd Signature
 const provideSignature2 = document.getElementById('lawyer2-sign');
 
 provideSignature2.onclick = async() => {
 
-    const dwAddress = document.getElementById('dw-address-sign').value;
+    // const dwAddress = document.getElementById('dw-address-sign').value;
+
     const multisigAddress = document.getElementById('ms-address-sign').value;
 
-    var web3 = new Web3(window.ethereum)
+    // var web3 = new Web3(window.ethereum)
     
-    const decentralisedWill = new web3.eth.Contract(dwABI, dwAddress)
+    // const decentralisedWill = new web3.eth.Contract(dwABI, dwAddress)
 
-    decentralisedWill.setProvider(window.ethereum)
+    // decentralisedWill.setProvider(window.ethereum)
 
-    console.log(decentralisedWill)
-
-    const encoded = await decentralisedWill.methods.getDistributeAssetData
-
-    console.log(encoded)
+    // console.log(decentralisedWill)
 
     var web3 = new Web3(window.ethereum)
 
