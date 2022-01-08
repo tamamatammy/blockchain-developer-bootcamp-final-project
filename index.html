@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Decentralised Will </title>
+    <script src = http://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js></script>
+</head>
+<body>
+    <h1>Decentralised Will</h1>
+    <!-- 1. detect MetaMask is/is not installed -->
+    <div id="wallet-detected"></div>
+
+    <!-- 2. Rich person set up multisig wallet  -->
+    <div>--------------------------------------------------------------------------------------------------------------------------</div>
+    <div>Rich Person appoints trusted lawyers for asset distribution after unfortunate event</div>
+    <button id="wallet-connect">Connect Rich Person Wallet</button>
+    <div id = wallet-current-account></div>
+
+    <!-- 2.1 Appoint trusted lawyer -->
+    <div></div>
+    Trusted Lawyer 1: <input id="add-lawyer1-box" type="varchar" placeholder = "Address">
+    <div></div>
+    Trusted Lawyer 2: <input id="add-lawyer2-box" type="varchar" placeholder = "Address">       
+    <div></div>
+    <button id="deploy-ms">Create MultiSig Wallet</button> 
+    <div id = "ms-address"></div>
+
+    <!-- 2.2. Send funds to multisig wallet -->
+    <div id = "wallet-current-account"></div>
+    <button id="ms-input-button">Add to Multisig Wallet</button>
+    <input id="ms-input-box" type="number" placeholder = "ETH">
+    <input id="ms-address-box" type="varchar" placeholder = "Mutisig Wallet Address">
+
+
+    <!-- 2.3.Get ms contract balance -->
+    <div></div>  
+    <button id="get-ms-balance">Total Locked Asset</button>
+    <input id="ms-address-box-2" type="varchar" placeholder = "Mutisig Wallet Address">
+    <div id = ms-balance></div>
+
+    <!-- 2. Rich person set up multisig wallet  -->
+    <div>--------------------------------------------------------------------------------------------------------------------------</div>
+    <div>Rich Person creates decentralised will </div>
+    <div></div>
+    <!-- Heir 1: <input id="heir1-box" type="varchar" placeholder = "Address">
+    <div></div>
+    Heir 2: <input id="heir2-box" type="varchar" placeholder = "Address">       
+    <div></div> -->
+    Executor: <input id="executor-box" type="varchar" placeholder = "Address">       
+    <div></div>
+    <button id="deploy-dw">Create Decentralised Will</button> 
+    <div id = "dw-address"></div>
+
+    <div>--------------------------------------------------------------------------------------------------------------------------</div>
+    After 70 years ~~~~~~~~~~~~~~~~~~~ Trusted lawyer 1 and 2 been told unfortunate event happened
+    <div>--------------------------------------------------------------------------------------------------------------------------</div>
+
+    <div>Trusted Lawyer 1</div>
+    <button id="lawyer1-wallet-connect">Connect Lawyer 1 Wallet</button>  
+    <div id = lawyer1-wallet></div>
+    Decentralised Will: <input id="dw-address-sign" type="varchar" placeholder = "address">  
+    Multi Signature: <input id="ms-address-sign" type="varchar" placeholder = "address">  
+    <button id="lawyer1-sign">Lawyer 1 Sign</button>
+
+    <div>--------------------------------------------------------------------------------------------------------------------------</div>
+    <div>Trusted Lawyer 2</div>
+    <button id="lawyer2-wallet-connect">Connect Lawyer Wallet</button>  
+    <div id = lawyer2-wallet></div>
+    Decentralised Will: <input id="dw-address-sign" type="varchar" placeholder = "address">  
+    Multi Signature: <input id="ms-address-sign" type="varchar" placeholder = "address">  
+    <button id="lawyer2-sign">Lawyer 2 Sign</button>    
+
+    <script src="dapp_dw.js" ></script>    
+</body>
+</html>
