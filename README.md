@@ -30,7 +30,7 @@ The full workflow of using the dApp is shown below. To make the whole flow easie
 
 ### 2 Trusted Lawyers provide signature to Multisig Wallet. Once all condition met, execute will
 
-![image](https://user-images.githubusercontent.com/50827444/148705974-69d87201-0e29-4582-bfda-c261860f3a28.png)
+![image](https://user-images.githubusercontent.com/50827444/148706379-fc60866b-7fff-4ce0-a2bb-3a820bdcca9e.png)
 
 
 
