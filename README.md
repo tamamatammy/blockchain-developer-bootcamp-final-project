@@ -23,9 +23,13 @@ The full workflow of using the dApp is shown below. To make the whole flow easie
 2 Trusted Parties to execute will: Trusted Lawyer 1, 2
 3 Heirs: Alice and Bob
 ### 1 Rich creates and deploy Multisig Wallet and Decentralised Will
-![image](https://user-images.githubusercontent.com/50827444/148706105-0c5ec5d5-b0d6-462c-b551-bbf9b494b30a.png)
-![image](https://user-images.githubusercontent.com/50827444/148705899-db677971-c23f-4e67-93be-7141d3ea0adf.png)
+
+![image](https://user-images.githubusercontent.com/50827444/148706194-80fe32b2-0dc0-4c43-873b-8774092874ad.png)
+
+![image](https://user-images.githubusercontent.com/50827444/148706205-45e265f7-0445-45da-9c98-42dec4420fa8.png)
+
 ### 2 Trusted Lawyers provide signature to Multisig Wallet. Once all condition met, execute will
+
 ![image](https://user-images.githubusercontent.com/50827444/148705974-69d87201-0e29-4582-bfda-c261860f3a28.png)
 
 
