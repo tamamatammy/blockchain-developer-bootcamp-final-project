@@ -58,7 +58,6 @@ contract MultiSig {
     
     function getSigNum(uint transactionId) public view returns(uint){   
         return transactions[transactionId].signum;
-
     }
 
     function submitTransaction(address destination, uint value, bytes memory data) public returns (uint transactionId) {

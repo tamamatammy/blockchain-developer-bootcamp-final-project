@@ -17,9 +17,9 @@ contract DecentralisedWill {
 
     constructor(address _multisig) {
         multisig = _multisig;
-        will[0].heir = 0x64a68c98E525161B1f8644331D83026015B8312D;
+        will[0].heir = 0xeD20A87D97C5aC762C585F0e15eCB95214951eC9;
         will[0].portion = 70;
-        will[1].heir = 0x8e90460fB6c12f8894b2C552F7e93997a31d3C63;
+        will[1].heir = 0x69793e3955956173Ba297ADDCA7670c2E639211C;
         will[1].portion = 30;
     }
 
@@ -77,27 +77,3 @@ contract DecentralisedWill {
     
     }
 }
-
-
-//// Get distrubtion list - address vs % mapping
-//// function getMapping() public {}
-
-// // Check transaction history of the owner's accounts
-// // If there are any activities in the last 12-month, revert contract
-// // else, process with the contract
-// function checkActivityHisory() public {}
-
-// // Get price oracle for assets in owner's account
-// function getPriceOracle() public {}
-
-// // Calculate total USD value of assets in Owner's account
-// function getValueUSD() public {}
-
-// // Distribute asset based on will
-// function distributeAsset() public {}
-
-
-
-
-
-
