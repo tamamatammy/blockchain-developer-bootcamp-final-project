@@ -19,9 +19,9 @@ This contract does not have any other functions apart from distribution. It can 
 
 ## High Level Workflow
 The full workflow of using the dApp is shown below. To make the whole flow easier, these are the roles required:
-1 Asset Owner: Rich Person
-2 Trusted Parties to execute will: Trusted Lawyer 1, 2
-3 Heirs: Alice and Bob
+1. Asset Owner: Rich Person
+2. Trusted Parties to execute will: Trusted Lawyer 1, 2
+3. Heirs: Alice and Bob
 ### 1 Rich creates and deploy Multisig Wallet and Decentralised Will
 
 ![image](https://user-images.githubusercontent.com/50827444/148706324-9f29b9d1-9991-4e1b-b6c4-3e8bd88172d2.png)
