@@ -10,16 +10,16 @@ const MultiSig = artifacts.require("MultiSig");
  
 contract("DecentralisedWill", function (accounts) {
 
-  const msOwners = [accounts[0], accounts[1]];
+  const msOwners = [accounts[1], accounts[2]];
   const msNumOwners = msOwners.length;
-  const alice = accounts[2];
-  const bob = accounts[3];
+  const alice = accounts[3];
+  const bob = accounts[4];
 
   describe("Test decentralised will functions", () => {
     const waitBlock = 0;
     before(async () => {
-      ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
-      dw = await DecentralisedWill.new(ms.address);
+      ms = await MultiSig.new(msOwners, msNumOwners, waitBlock, accounts[1]);
+      dw = await DecentralisedWill.new(ms.address, alice, 70, bob, 30);
     })
   
   it('Should dw balance starts with 0 ETH', async () => {
@@ -75,8 +75,8 @@ contract("DecentralisedWill", function (accounts) {
   describe("Test multi signaure functions", () => {
     const waitBlock = 0;
     before(async () => {
-      ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
-      dw = await DecentralisedWill.new(ms.address);
+      ms = await MultiSig.new(msOwners, msNumOwners, waitBlock, accounts[1]);
+      dw = await DecentralisedWill.new(ms.address, alice, 70, bob, 30);
     })
 
     it("should ms assert true", async function () {
@@ -103,8 +103,8 @@ contract("DecentralisedWill", function (accounts) {
       console.log("Alice's balance before contract" + priorAliceBalance)
       
       //Multisig + Deposit dw + exedute distributeAsset
-      await ms.submitTransaction(dw.address, 0, abi, {from: accounts[0]});
-      await ms.confirmTransaction(0, {from: accounts[1]}) 
+      await ms.submitTransaction(dw.address, 0, abi, {from: accounts[1]});
+      await ms.confirmTransaction(0, {from: accounts[2]}) 
 
       const postContractBalance = await web3.eth.getBalance(ms.address);
       console.log('MultiSig balance After executing contract ' + postContractBalance)  
@@ -126,7 +126,7 @@ contract("DecentralisedWill", function (accounts) {
       console.log("MultiSig balance before executing contract ", msPriorbalance);
 
       try {
-        await ms.submitTransaction(dw.address, 0, abi, {from: accounts[0]});
+        await ms.submitTransaction(dw.address, 0, abi, {from: accounts[1]});
         await ms.confirmTransaction(0, {from: accounts[1]}) 
         throw new Error("tx did not fail")
       } catch (err){}
@@ -138,17 +138,17 @@ contract("DecentralisedWill", function (accounts) {
 
     it("Should ms failed without losing contract balance unchanged if the contract did not receive enough signature ", async() =>{
       const waitBlock = 0;
-      dw_mew = await DecentralisedWill.new(dw.address); // create new instance
-      ms_new = await MultiSig.new(msOwners, msNumOwners, waitBlock); // create new instance
+      dw_mew = await DecentralisedWill.new(dw.address, alice, 70, bob, 30); // create new instance
+      ms_new = await MultiSig.new(msOwners, msNumOwners, waitBlock, accounts[1]); // create new instance
       const dwAmount = web3.utils.toWei("0.01", "ether");
       const abi = await dw.getDistributeAssetData();
       console.log(abi)
       await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
-      await ms_new.submitTransaction(dw_mew.address, 0, abi, {from: accounts[0]});
+      await ms_new.submitTransaction(dw_mew.address, 0, abi, {from: accounts[1]});
       const msPriorbalance = await web3.eth.getBalance(ms_new.address)
       console.log("MultiSig balance before executing contract ", msPriorbalance);
       try {
-        await ms_new.confirmTransaction(0, {from: accounts[0]}) 
+        await ms_new.confirmTransaction(0, {from: accounts[1]}) 
         throw new Error("tx did not fail")
       } catch (err){}
       const msPostBalance = await web3.eth.getBalance(ms_new.address)
@@ -163,16 +163,16 @@ describe("Test wallet lock function contract", () => {
 
 it("should not allowed dw execution during locked period", async() =>{
       const waitBlock = 100;
-      ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
-      dw = await DecentralisedWill.new(ms.address);
+      ms = await MultiSig.new(msOwners, msNumOwners, waitBlock, accounts[1]);
+      dw = await DecentralisedWill.new(ms.address, alice, 70, bob, 30);
       dwAmount = web3.utils.toWei("0.01", "ether");
       const encoded = await dw.getDistributeAssetData.call();
 
       await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
       const msPriorbalance = await web3.eth.getBalance(ms.address)
 
-      await ms.submitTransaction(dw.address, 0, encoded, {from: accounts[0]});
-      await ms.confirmTransaction(0, {from: accounts[1]});
+      await ms.submitTransaction(dw.address, 0, encoded, {from: accounts[1]});
+      await ms.confirmTransaction(0, {from: accounts[2]});
 
       const msPostBalance = await web3.eth.getBalance(ms.address)
 
@@ -182,8 +182,8 @@ it("should not allowed dw execution during locked period", async() =>{
 
 it("should allowed execution after locked period", async() =>{
     const waitBlock = 0;
-    ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
-    dw = await DecentralisedWill.new(ms.address);
+    ms = await MultiSig.new(msOwners, msNumOwners, waitBlock, accounts[1]);
+    dw = await DecentralisedWill.new(ms.address, alice, 70, bob, 30);
     dwAmount = web3.utils.toWei("0.01", "ether");
     const encoded = await dw.getDistributeAssetData.call();
     await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
@@ -191,8 +191,8 @@ it("should allowed execution after locked period", async() =>{
     console.log(msBalance)
     const msPriorbalance = await web3.eth.getBalance(ms.address)
 
-    await ms.submitTransaction(dw.address, 0, encoded, {from: accounts[0]});
-    await ms.confirmTransaction(0, {from: accounts[1]});
+    await ms.submitTransaction(dw.address, 0, encoded, {from: accounts[1]});
+    await ms.confirmTransaction(0, {from: accounts[2]});
 
     const msPostBalance = await web3.eth.getBalance(ms.address)
 
@@ -200,23 +200,30 @@ it("should allowed execution after locked period", async() =>{
 
 })
 
-it("should return ms signature count = 2 after 2 signatures", async() =>{
+it('Should let fixed withdraw address withdraw', async () => {
   const waitBlock = 0;
-
-  console.log(waitBlock);
-
-  ms = await MultiSig.new(msOwners, msNumOwners, waitBlock);
-  dw = await DecentralisedWill.new(ms.address);
-  dwAmount = web3.utils.toWei("0.01", "ether");
-  const encoded = await dw.getDistributeAssetData.call();
-  await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: dwAmount});
-  await ms.submitTransaction(dw.address, 0, encoded, {from: accounts[0]});
-  await ms.confirmTransaction(0, {from: accounts[1]});
-
-  const signum = await ms.getSigNum(0)
-  console.log(signum)
-  assert.equal(2, signum, "Signum is not 2!")
-})
+  const amount = web3.utils.toWei("1", "ether")
+  ms = await MultiSig.new(msOwners, msNumOwners, waitBlock, accounts[1]);
+  await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: amount});
+  let priorContractBalance = await web3.eth.getBalance(ms.address)
+  let priorBalance = await web3.eth.getBalance(accounts[1]);
+  await ms.withdraw({from: accounts[1]})
+  let postBalance = await web3.eth.getBalance(accounts[1]);
+  let postContractBalance = await web3.eth.getBalance(ms.address) 
+  let diff = priorContractBalance-postContractBalance
+  assert.equal(amount, diff, 'Multisig balance is not withdrawn correctly!');
 })
 
+it('Should fail if non withdraw address withdraw ', async () => {
+  const waitBlock = 0;
+  const amount = web3.utils.toWei("1", "ether")
+  ms = await MultiSig.new(msOwners, msNumOwners, waitBlock, accounts[1]);
+  await web3.eth.sendTransaction({from: accounts[0], to: ms.address, value: amount});
+  try{
+    await ms.withdraw({from: accounts[2]})
+    throw new Error("tx did not fail")
+  }catch(err){}
+})
+
+})
 })

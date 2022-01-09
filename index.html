@@ -13,6 +13,13 @@
     <!-- 1. detect MetaMask is/is not installed -->
     <div id="wallet-detected"></div>
 
+    <!-- 2.3.Get ms contract balance -->
+    <div></div>  
+    <button id="get-balance">Get Balance</button>
+    <input id="address-box" type="varchar" placeholder = "address">
+    <div id = address-balance></div>
+
+
     <!-- 2. Rich person set up multisig wallet  -->
     <div>--------------------------------------------------------------------------------------------------------------------------</div>
     <div>Rich Person appoints trusted lawyers for asset distribution after unfortunate event</div>
@@ -21,14 +28,14 @@
 
     <!-- 2.1 Appoint trusted lawyer -->
     <div></div>
-    Trusted Lawyer 1: <input id="add-lawyer1-box" type="varchar" placeholder = "Address">
+    Trusted Lawyer 1: <input id="add-lawyer1-box" type="varchar" placeholder = "address">
     <div></div>
-    Trusted Lawyer 2: <input id="add-lawyer2-box" type="varchar" placeholder = "Address">       
+    Trusted Lawyer 2: <input id="add-lawyer2-box" type="varchar" placeholder = "address">       
     <div></div>
     Wallet lock for: <input id="lock-block-box" type="number" placeholder = "number of block">       
+    Withdrawable Address: <input id="withdraw-address" type="varchar" placeholder = "address">       
     <button id="deploy-ms">Create MultiSig Wallet</button> 
     <div id = "ms-address"></div>
-
 
     <!-- 2.2. Send funds to multisig wallet -->
     <div id = "wallet-current-account"></div>
@@ -36,44 +43,60 @@
     <input id="ms-input-box" type="number" placeholder = "ETH">
     <input id="ms-address-box" type="varchar" placeholder = "Mutisig Wallet Address">
 
-
-    <!-- 2.3.Get ms contract balance -->
-    <div></div>  
-    <button id="get-ms-balance">Total Locked Asset</button>
-    <input id="ms-address-box-2" type="varchar" placeholder = "Mutisig Wallet Address">
-    <div id = ms-balance></div>
-
-    <!-- 2. Rich person set up multisig wallet  -->
+    <!-- 3. Rich person set up decentralised will  -->
     <div>--------------------------------------------------------------------------------------------------------------------------</div>
     <div>Rich Person creates decentralised will </div>
     <div></div>
-    <!-- Heir 1: <input id="heir1-box" type="varchar" placeholder = "Address">
+    Heir 1: <input id="heir1-box" type="varchar" placeholder = "address">
+    Portion 1: <input id="portion1-box" type="number" placeholder = "portion">%
     <div></div>
-    Heir 2: <input id="heir2-box" type="varchar" placeholder = "Address">       
-    <div></div> -->
-    Executor: <input id="executor-box" type="varchar" placeholder = "Address">       
+    Heir 2: <input id="heir2-box" type="varchar" placeholder = "address">
+    Portion 2: <input id="portion2-box" type="number" placeholder = "portion">%  
+    <div></div>
+    Will Executor: <input id="executor-box" type="varchar" placeholder = "multisig address">       
     <div></div>
     <button id="deploy-dw">Create Decentralised Will</button> 
     <div id = "dw-address"></div>
 
+    <!-- 3. Rich person set up decentralised will  -->
     <div>--------------------------------------------------------------------------------------------------------------------------</div>
-    After 70 years ~~~~~~~~~~~~~~~~~~~ Trusted lawyer 1 and 2 been told unfortunate event happened
-    <div>--------------------------------------------------------------------------------------------------------------------------</div>
+    <div>Multsig Locked Asset Withdrawal </div>
+    <div></div>
+    Multisig Address: <input id="ms-address-withdraw" type="varchar" placeholder = "address">
+    <button id="withdraw-ms">Withdraw Locked Asset</button>
 
+    <div>--------------------------------------------------------------------------------------------------------------------------</div>
+    After 70 years ~~~~~~~~~~~~~~~~~~~ Trusted Lawyer 1 and 2 been told unfortunate event happened
+    <div>--------------------------------------------------------------------------------------------------------------------------</div>
+    <!-- 4 Multisig execute decenralised will  -->
+    <!-- 4.1 Trusted lawyer 1 provides 1st signature  -->
     <div>Trusted Lawyer 1</div>
     <button id="lawyer1-wallet-connect">Connect Lawyer 1 Wallet</button>  
     <div id = lawyer1-wallet></div>
     Decentralised Will: <input id="dw-address-sign" type="varchar" placeholder = "address">  
     Multi Signature: <input id="ms-address-sign" type="varchar" placeholder = "address">  
     <button id="lawyer1-sign">Lawyer 1 Sign</button>
-
     <div>--------------------------------------------------------------------------------------------------------------------------</div>
+    <!-- 4.2 Trusted lawyer 2 provides 1st signature  -->
     <div>Trusted Lawyer 2</div>
     <button id="lawyer2-wallet-connect">Connect Lawyer Wallet</button>  
     <div id = lawyer2-wallet></div>
     Decentralised Will: <input id="dw-address-sign" type="varchar" placeholder = "address">  
     Multi Signature: <input id="ms-address-sign" type="varchar" placeholder = "address">  
     <button id="lawyer2-sign">Lawyer 2 Sign</button>
+    <div>localhost rich 0x5Bef0Cc38e955F04dD8DfD818e15A5B1c989113f</div>
+    <div>localhost lawyer1 0x8FF65F62331eE99d3093Dd99b6Eb5bfE8011Fa1E</div>
+    <div>localhost lawyer2 0xAF361C04595C3752138615261e90ccd6fAA518EB</div>
+    <div>local alice 0x8DB9Abd030937481D6f8c7B9e102Eb0F4cBa141b </div>
+    <div>local bob 0xfB6C61cA1F684807059A6F5C8d6ffa51B88E2828 </div>
+
+    <div>---------------</div>
+    <div>kovan rich 0xb4255529ea54eDae0D11aA49ef365A88400f9f92</div>
+    <div>kovan lawyer1 0x869Faa442A4573c00e80E79C7b928837D91A4e0c</div>
+    <div>kovan lawyer2 0x5fe0dDf89ED2ee270Da01fBd8c1eD2Ab85F12e0f</div>
+    <div>kovan alice 0xeD20A87D97C5aC762C585F0e15eCB95214951eC9</div>
+    <div>kovan bob 0xde4f3166590654A2D70e0d9D3BDA0C00ce9e35C7</div>
+
     <script src="dapp_dw.js" ></script>   
 </body>
 </html>
