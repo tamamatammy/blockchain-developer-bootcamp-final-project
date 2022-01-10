@@ -1,4 +1,4 @@
-const { lowerCase } = require("lodash");
+// const { lowerCase } = require("lodash");
 const DecentralisedWill = artifacts.require("DecentralisedWill");
 const MultiSig = artifacts.require("MultiSig");
 
