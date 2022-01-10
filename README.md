@@ -6,6 +6,9 @@ The goal is to create a smart contract, Decentralised Will to distribute Ethereu
 1. DApp https://tamamatammy.github.io/blockchain-developer-bootcamp-final-project/
 2. Dapp Demonstration tbc 
 
+## Network
+Kovan Testnet https://kovan.etherscan.io/
+
 ## How does the dApp work?
 The dApp is powered by three smart contracts. 
 ### Multi Signature Wallet MultiSig.sol - Deployed by Asset Owner
