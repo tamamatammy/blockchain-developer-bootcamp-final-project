@@ -1,37 +1,38 @@
 # blockchain-developer-bootcamp-final-project
 ## Overview
-The goal is to create a smart contract, Decentralised Will to distribute Ethereum assets to a list of pre-defined addresses after the unfortunate death of asset owner. A given asset owner creates the will when he/she is alive. The distribution can and only can be triggered by a multisig wallet who also setup by the asset owner in advanced. After the unforuntate event, the trusted parties that being appointed by the asset owner can provide their signatures to execute the asset distribution.
+The goal is to create a smart contract, Decentralised Will to distribute Ether to a list of pre-defined addresses after the unfortunate death of asset owner. A given asset owner creates the will when he/she is alive. The distribution can and only can be triggered by a multisig wallet which is also setup by the asset owner in advanced. After the unforuntate event, the trusted parties that being appointed by the asset owner can provide their signatures to execute the asset distribution.
 
 ## Important Links
-1. DApp https://tamamatammy.github.io/blockchain-developer-bootcamp-final-project/
+1. DApp Link https://tamamatammy.github.io/blockchain-developer-bootcamp-final-project/
 2. Dapp Demonstration https://www.loom.com/share/1534f9252aa74446abcfe97090dd591a 
 
 ## Network
-I used Kovan Testnet https://kovan.etherscan.io/, but since contracts deployment is performed via dApp, it should be able to use any testnet. Due to the nature of the app, the contract has to be deployed by the individual themselves
+Any Ethereum network. I used Kovan Testnet https://kovan.etherscan.io/, but since contracts deployment is performed via dApp, it should be able to use any testnet. Due to the nature of the app, the contract has to be deployed by the individual in order to trigger the distribution later
 
 ## Directory Structure
 1. Main contract solidity code in in the contracts folder
 2. Unit testing code is in the test folder
-3. dApp HTML and js code are in the first layer of the directory
+3. dApp develomnet code index.html and decentralised_will.js are astored in the first layer of the directory
 
 ## How does the dApp work?
 The dApp is powered by two main smart contracts and one library. 
 ### Multi Signature Wallet MultiSig.sol - Deployed by Asset Owner
-This it the contract that executes the actual asset distribution. Asset owner decides: 
+This it the contract that executes wil. Asset owner decides: 
 1. Who can execute his/her will in the future
-2. How many signautres are required before excecuting the will
-3. How long will the fund be locked in the wallet after first signature is received. This is to prevent all pre-appointed trusted parties and pre-appointed heirs work together to access the fund when the asset owner is still alive. The asset owner can tell the multisig wallet to be under locked down for 12-month before receiving the last required signaure, in this case asset owner can withdraw the fund during the lockdown time after he/she notices that all parties are acting maliciously
-4. Who can withdraw the fund from the multisig wallet - it can be the owner or some other people the owner prefer. Withdrawal action is only allowed for this address, nobody else can withdraw fund from multisig wallet
+2. Who much fund is going to be distributed
+3. How long will the fund be locked in the wallet after first signature is received. This is to prevent all pre-appointed trusted parties and heirs act maliciously to access the fund when the asset owner is still alive. The wallet lockdown can allow asset owner to have time to react and withdraw fund from the multisig wallet before the last signature
+4. Who can withdraw the fund from the multisig wallet - it can be the owner or other people that the owner trusts. Withdrawal action is only allowed for this address, nobody else can withdraw fund from multisig wallet
 
 ### Asset Distribution Contract DecentralisedWill.sol - Deployed by Asset
 This is the contract that contains the actual will - who gets how much ethers. Again, asset owner decieds:
 1. Who are the heirs
 2. What are the portions for each heirs
+3. Who can execute this contract
 This contract does not have any other functions apart from distribution. It can only be called by the Multi Siganture wallet.
 
 ## Steps to executing Decentralised Will
 1. Go to link  https://tamamatammy.github.io/blockchain-developer-bootcamp-final-project/
-2. Prepare 5 different address to play the roles Rich, lawyer 1, lawyer 2, Alice, and Bob
+2. Prepare 5 different addresses to play the roles Rich, lawyer 1, lawyer 2, Alice, and Bob
 3. Connect to a testnet
 4. Connect as Rich to create and deploy MultiSig.sol using dApp
 5. Connect as Rich to create and deploy DecentralisedWill.sol using dApp
