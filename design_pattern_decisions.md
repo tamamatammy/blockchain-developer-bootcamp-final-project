@@ -1,4 +1,4 @@
-#Contract Design Pattern
+# Contract Design Pattern
 ## Inheritance and Interfaces 
 1. Imported library Utils that holds utils function for both contracts
 
