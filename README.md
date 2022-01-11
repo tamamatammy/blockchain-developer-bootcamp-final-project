@@ -14,6 +14,12 @@ Any Ethereum network. I used Kovan Testnet https://kovan.etherscan.io/, but sinc
 2. Unit testing code is in the test folder
 3. dApp develomnet code index.html and decentralised_will.js are astored in the first layer of the directory
 
+## Prerequisite
+* Node.js v16.13.0
+* solidity 0.8.10
+* Web3 Wallet
+* Ganache on port 8545 for local testing
+
 ## How does the dApp work?
 The dApp is powered by two main smart contracts and one library. 
 ### Multi Signature Wallet MultiSig.sol - Deployed by Asset Owner
