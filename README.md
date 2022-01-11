@@ -7,7 +7,7 @@ The goal is to create a smart contract, Decentralised Will to distribute Ethereu
 2. Dapp Demonstration https://www.loom.com/share/1534f9252aa74446abcfe97090dd591a 
 
 ## Network
-I used Kovan Testnet https://kovan.etherscan.io/, but since no contracts deployment is performed via dApp, it should be able to use any testnet
+I used Kovan Testnet https://kovan.etherscan.io/, but since contracts deployment is performed via dApp, it should be able to use any testnet. Due to the nature of the app, the contract has to be deployed by the individual themselves
 
 ## Directory Structure
 1. Main contract solidity code in in the contracts folder
