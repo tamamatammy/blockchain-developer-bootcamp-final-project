@@ -9,6 +9,11 @@ The goal is to create a smart contract, Decentralised Will to distribute Ethereu
 ## Network
 I used Kovan Testnet https://kovan.etherscan.io/, but since no contracts deployment is performed via dApp, it should be able to use any testnet
 
+## Directory Structure
+1. Main contract solidity code in in the contracts folder
+2. Unit testing code is in the test folder
+3. dApp HTML and js code are in the first layer of the directory
+
 ## How does the dApp work?
 The dApp is powered by two main smart contracts and one library. 
 ### Multi Signature Wallet MultiSig.sol - Deployed by Asset Owner
