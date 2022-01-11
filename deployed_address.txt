@@ -1,0 +1,1 @@
+Please use the dapp to deploy contracts to any testnet you want. Due to the nature of the dAPP, each contract has to be depoloyed by individual
